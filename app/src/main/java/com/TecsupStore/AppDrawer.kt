@@ -36,6 +36,7 @@ val destinosDrawer = listOf(
 @Composable
 fun AppDrawer(
     rutaActual: String?,
+    cantidadFavoritos: Int = 0,
     onDestinoClick: (String) -> Unit,
     onCerrarSesion: () -> Unit
 ) {
@@ -72,6 +73,9 @@ fun AppDrawer(
             NavigationDrawerItem(
                 label = { Text(destino.titulo) },
                 icon = { Icon(destino.icono, contentDescription = null) },
+                badge = if (destino.ruta == "favoritos" && cantidadFavoritos > 0) {
+                    { Badge { Text(cantidadFavoritos.toString()) } }
+                } else null,
                 selected = rutaActual == destino.ruta,
                 onClick = { onDestinoClick(destino.ruta) },
                 colors = coloresItem,

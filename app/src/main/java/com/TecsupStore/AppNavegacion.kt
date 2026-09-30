@@ -41,6 +41,7 @@ fun AppNavegacion() {
         drawerContent = {
             AppDrawer(
                 rutaActual = rutaActual,
+                cantidadFavoritos = productosFavoritos.size,
                 onDestinoClick = { ruta ->
                     navController.navigate(ruta) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
