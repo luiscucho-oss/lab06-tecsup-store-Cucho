@@ -17,12 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TecsupStoreTheme {
-                Column(
-                    modifier = Modifier.padding(16.dp).padding(top = 32.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    productosEjemplo.forEach { TarjetaProducto(it) }
-                }
+                AppNavegacion()
             }
         }
     }
