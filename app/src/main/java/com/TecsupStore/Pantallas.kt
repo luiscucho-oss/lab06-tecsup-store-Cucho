@@ -14,14 +14,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PantallaInicio() {
+fun PantallaInicio(onFavorito: (Producto) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(productosEjemplo) { producto ->
-            TarjetaProducto(producto)
+            TarjetaProducto(
+                producto = producto,
+                onFavorito = onFavorito
+            )
+        }
+    }
+}
+
+@Composable
+fun PantallaFavoritos(
+    productosFavoritos: List<Producto>,
+    onFavorito: (Producto) -> Unit
+) {
+    if (productosFavoritos.isEmpty()) {
+        PantallaSimple("No hay favoritos")
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(productosFavoritos) { producto ->
+                TarjetaProducto(
+                    producto = producto,
+                    onFavorito = onFavorito
+                )
+            }
         }
     }
 }

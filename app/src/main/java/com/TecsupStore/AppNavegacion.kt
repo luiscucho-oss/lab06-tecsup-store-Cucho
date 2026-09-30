@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +28,8 @@ import kotlinx.coroutines.launch
 fun AppNavegacion() {
     val navController = rememberNavController()
     val contexto = LocalContext.current
+
+    val productosFavoritos = remember { mutableStateListOf<Producto>() }
 
     val estadoDrawer = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -79,9 +83,29 @@ fun AppNavegacion() {
                 startDestination = "inicio",
                 modifier = Modifier.padding(espacioInterno)
             ) {
-                composable("inicio") { PantallaInicio() }
+                composable("inicio") {
+                    PantallaInicio(
+                        onFavorito = { producto ->
+                            if (!productosFavoritos.contains(producto)) {
+                                productosFavoritos.add(producto)
+                                Toast.makeText(contexto, "${producto.nombre} agregado a favoritos", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(contexto, "${producto.nombre} ya está en favoritos", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
+                }
                 composable("pedidos") { PantallaSimple("Mis pedidos") }
-                composable("favoritos") { PantallaSimple("Favoritos") }
+                composable("favoritos") {
+                    PantallaFavoritos(
+                        productosFavoritos = productosFavoritos,
+                        onFavorito = { producto ->
+                            if (!productosFavoritos.contains(producto)) {
+                                productosFavoritos.add(producto)
+                            }
+                        }
+                    )
+                }
                 composable("perfil") { PantallaSimple("Perfil") }
             }
         }

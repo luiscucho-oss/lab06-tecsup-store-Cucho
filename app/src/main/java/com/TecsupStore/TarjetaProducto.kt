@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.sp
 import java.util.Locale
 
 @Composable
-fun TarjetaProducto(producto: Producto) {
+fun TarjetaProducto(
+    producto: Producto,
+    onFavorito: (Producto) -> Unit
+) {
     var expandido by remember { mutableStateOf(false) }
 
     Card(
@@ -63,7 +66,10 @@ fun TarjetaProducto(producto: Producto) {
                     DropdownMenuItem(
                         text = { Text("Favoritos") },
                         leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
-                        onClick = { expandido = false }
+                        onClick = {
+                            onFavorito(producto)
+                            expandido = false
+                        }
                     )
                     HorizontalDivider()
                     DropdownMenuItem(
