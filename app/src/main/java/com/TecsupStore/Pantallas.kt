@@ -14,15 +14,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PantallaInicio(onFavorito: (Producto) -> Unit) {
+fun PantallaInicio(
+    productosFavoritos: List<Producto>,
+    onFavorito: (Producto) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(productosEjemplo) { producto ->
+        items(productosEjemplo, key = { it.id }) { producto ->
             TarjetaProducto(
                 producto = producto,
+                esFavorito = productosFavoritos.contains(producto),
                 onFavorito = onFavorito
             )
         }
@@ -42,9 +46,10 @@ fun PantallaFavoritos(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(productosFavoritos) { producto ->
+            items(productosFavoritos, key = { it.id }) { producto ->
                 TarjetaProducto(
                     producto = producto,
+                    esFavorito = true,
                     onFavorito = onFavorito
                 )
             }

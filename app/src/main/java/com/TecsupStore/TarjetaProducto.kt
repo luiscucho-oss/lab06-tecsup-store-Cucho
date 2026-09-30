@@ -24,6 +24,7 @@ import java.util.Locale
 @Composable
 fun TarjetaProducto(
     producto: Producto,
+    esFavorito: Boolean = false,
     onFavorito: (Producto) -> Unit
 ) {
     var expandido by remember { mutableStateOf(false) }
@@ -64,7 +65,7 @@ fun TarjetaProducto(
                     onDismissRequest = { expandido = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Favoritos") },
+                        text = { Text(if (esFavorito) "Quitar de favoritos" else "Favoritos") },
                         leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
                         onClick = {
                             onFavorito(producto)

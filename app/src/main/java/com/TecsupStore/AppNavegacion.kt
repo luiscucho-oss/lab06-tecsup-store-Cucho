@@ -79,6 +79,16 @@ fun AppNavegacion() {
                 )
             }
         ) { espacioInterno ->
+            val toggleFavorito: (Producto) -> Unit = { producto ->
+                if (productosFavoritos.contains(producto)) {
+                    productosFavoritos.remove(producto)
+                    Toast.makeText(contexto, "${producto.nombre} quitado de favoritos", Toast.LENGTH_SHORT).show()
+                } else {
+                    productosFavoritos.add(producto)
+                    Toast.makeText(contexto, "${producto.nombre} agregado a favoritos", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             NavHost(
                 navController = navController,
                 startDestination = "inicio",
@@ -86,25 +96,15 @@ fun AppNavegacion() {
             ) {
                 composable("inicio") {
                     PantallaInicio(
-                        onFavorito = { producto ->
-                            if (!productosFavoritos.contains(producto)) {
-                                productosFavoritos.add(producto)
-                                Toast.makeText(contexto, "${producto.nombre} agregado a favoritos", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(contexto, "${producto.nombre} ya está en favoritos", Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                        productosFavoritos = productosFavoritos,
+                        onFavorito = toggleFavorito
                     )
                 }
                 composable("pedidos") { PantallaSimple("Mis pedidos") }
                 composable("favoritos") {
                     PantallaFavoritos(
                         productosFavoritos = productosFavoritos,
-                        onFavorito = { producto ->
-                            if (!productosFavoritos.contains(producto)) {
-                                productosFavoritos.add(producto)
-                            }
-                        }
+                        onFavorito = toggleFavorito
                     )
                 }
                 composable("perfil") { PantallaSimple("Perfil") }
