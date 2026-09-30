@@ -1,5 +1,7 @@
 package com.TecsupStore
 
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.currentBackStackEntryAsState
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -22,27 +24,25 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavegacion() {
-    // Controlador de navegación: sabe en qué pantalla estamos y permite cambiar
     val navController = rememberNavController()
     val contexto = LocalContext.current
 
-    // Estado del drawer y scope para abrirlo/cerrarlo
     val estadoDrawer = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val entradaActual by navController.currentBackStackEntryAsState()
+    val rutaActual = entradaActual?.destination?.route
 
     ModalNavigationDrawer(
         drawerState = estadoDrawer,
         drawerContent = {
             AppDrawer(
+                rutaActual = rutaActual,
                 onDestinoClick = { ruta ->
-                    // Navegamos a la ruta del ítem tocado
                     navController.navigate(ruta) {
-                        // Evita apilar la misma pantalla varias veces
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
                     }
-                    // Cerramos el drawer después de navegar
                     scope.launch { estadoDrawer.close() }
                 },
                 onCerrarSesion = {
@@ -61,7 +61,6 @@ fun AppNavegacion() {
                             Text("Más vendidos", fontSize = 12.sp)
                         }
                     },
-                    // Ícono ≡ que abre el drawer
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { estadoDrawer.open() } }) {
                             Icon(Icons.Default.Menu, contentDescription = "Abrir menú")
@@ -75,7 +74,6 @@ fun AppNavegacion() {
                 )
             }
         ) { espacioInterno ->
-            // NavHost: aquí se muestra la pantalla según la ruta actual
             NavHost(
                 navController = navController,
                 startDestination = "inicio",
